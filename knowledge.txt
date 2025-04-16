@@ -1,0 +1,5 @@
+classes and objects: 
+a class is a blueprint, of which can create multiple objects
+objects are like clones of code, and can contain functions, variables, ect.
+classes must make use of the "self" arguement
+
