@@ -1,5 +1,6 @@
 import sqlite3
 import random
+import time
 import shutil
 
 ## i do not like using the OS module (that i've noticed bas has a fondness for), as it is OS specific; there might be errors for non-unix users (windows) that i will be unable to test
@@ -50,10 +51,11 @@ class initilisation:
 class program:
     def userinstruction(self):
         cursor = connection.cursor()
-        userwant = int(input(f"what would you like to do? \n   [1] add a new customer, including all relavent information \n   [2] edit customer data \n   [3] display all customer data \n (input here): "))
         instructiondone = 0
         while instructiondone == 0:
-            if userwant == 1:
+            userwant = 0
+            userwant = input(f"what would you like to do? \n   [1] add a new customer, including all relavent information \n   [2] edit customer data \n   [3] display all customer data \n   [4] search for a user \n (input here): ")
+            if userwant == "1":
                 fname = input("what is the customer's first name?: ")
                 lname = input("what is the customer's last name?: ")
                 phonegood = 0
@@ -73,8 +75,13 @@ class program:
                 cursor.execute(query)
                 connection.commit()
 
-            if userwant == 2:
+            if userwant == "2":
                 uuid_enter = input("Enter the UUID of the customer you want to edit: ")
+                try:
+                    uuid_enter = int(uuid_enter)
+                except:
+                    print("Invalid UUID. Please enter a valid UUID.")
+                    break
                 edit_value = input("Which field would you like to edit? (fname, lname, phone, email, address, city, postal_code): ")
                 new_value = input(f"Enter the new value for {edit_value}: ")
 
@@ -87,7 +94,7 @@ class program:
                 print("Customer data has been updated")
                 instructiondone = 1
 
-            elif userwant == 3:
+            elif userwant == "3":
                 terminal_size = shutil.get_terminal_size()
                 terminal_width = terminal_size.columns
                 if terminal_width < 130:
@@ -95,16 +102,23 @@ class program:
                 query = "SELECT * FROM customers;"
                 cursor.execute(query)
                 rows = cursor.fetchall()
-                print("\nCustomer Data:")
+                print("\n" * 2)
+                print("\n")
                 print(f"{'UUID':<10}{'First Name':<15}{'Last Name':<15}{'Phone':<15}{'Email':<25}{'Address':<20}{'City':<15}{'Postal Code':<10}")
                 print("一" * 65)
                 for row in rows:
                     print(f"{row[0]:<10}{row[1]:<15}{row[2]:<15}{row[3]:<15}{row[4]:<25}{row[5]:<20}{row[6]:<15}{row[7]:<10}")
                 print("一" * 65)
-                instructiondone = 1
+                input()
 
-            if userwant != 1 and userwant != 2 and userwant != 3:
+            elif userwant == "4":
+                print("serach function is under development")
+
+
+            if userwant != "1" and userwant != "2" and userwant != "3" and userwant != "4" and userwant != 0:
                 print("error: invalid input, please try again")
+                userwant = 0
+                time.sleep(2)
 
 init = initilisation()
 init.create_tables()
