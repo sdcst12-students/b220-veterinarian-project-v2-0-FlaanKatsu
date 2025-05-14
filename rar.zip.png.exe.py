@@ -112,7 +112,12 @@ class program:
                 input()
 
             elif userwant == "4":
-                print("serach function is under development")
+                userdata = ["uuid", "fname", "lname", "phone", "email", "address", "city", "postal_code"]
+                search = input("search for: \n[1] uuid\n[2] fname\n[3] lname\n[4] phone\n[5] email\n[6] address\n[7] city\n[8] postal_code: ")
+                searchquery = input(f"enter the search query: ")
+                cursor.execute(f"SELECT * FROM customers WHERE {userdata[int(search) - 1]} = '{searchquery}';")
+                print(f"\n{cursor.fetchall()}\n")
+                
 
 
             if userwant != "1" and userwant != "2" and userwant != "3" and userwant != "4" and userwant != 0:
